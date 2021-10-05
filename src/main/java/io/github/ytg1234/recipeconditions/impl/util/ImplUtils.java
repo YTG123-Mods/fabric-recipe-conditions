@@ -50,7 +50,7 @@ public final class ImplUtils {
 
         while (recipes.hasNext()) {
             Map.Entry<Identifier, JsonElement> entry = recipes.next();
-            logger.debug("Attempting to load recipe " + entry.getKey().toString());
+            //logger.debug("Attempting to load recipe " + entry.getKey().toString());
 
             try {
                 if (shouldRemoveRecipe(entry)) recipes.remove();
