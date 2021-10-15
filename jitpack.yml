@@ -1,5 +1,9 @@
 jdk:
     - openjdk16
 before_install:
-   - sdk install java 16.0.2-tem
-   - sdk use java 16.0.2-tem
+    - curl -so install.sh "https://get.sdkman.io?rcupdate=false"
+    - bash install.sh
+    - source ~/.sdkman/bin/sdkman-init.sh
+    - sdk install java 16.0.2-tem
+    - sdk use java 16.0.2-tem
+    - source ~/.sdkman/bin/sdkman-init.sh
