@@ -1,5 +1,5 @@
 plugins {
-	id("fabric-loom") version "0.8-SNAPSHOT"
+	id("fabric-loom") version "0.10-SNAPSHOT"
 	`maven-publish`
 	id("com.modrinth.minotaur") version "1.2.1"
 }
@@ -9,11 +9,11 @@ object Globals {
 	const val abn = "fabric-recipe-conditions"
 	const val version = "0.4.1"
 
-	const val mcVer = "1.17"
-	const val yarnBuild = "6"
+	const val mcVer = "1.18"
+	const val yarnBuild = "1"
 
-	const val loaderVer = "0.11.3"
-	const val fapiVer = "0.34.10+1.17"
+	const val loaderVer = "0.12.8"
+	const val fapiVer = "0.43.1+1.18"
 
 	const val modrinthId = "SfG9lyVw"
 	const val unstable = false
@@ -23,8 +23,8 @@ group = Globals.grp
 version = Globals.version
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_16
-	targetCompatibility = JavaVersion.VERSION_16
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 }
 
 // region testmod
@@ -36,19 +36,23 @@ sourceSets.create("testmod") {
 
 configurations.getByName("testmodImplementation").extendsFrom(configurations["implementation"])
 
-tasks {
-	register<net.fabricmc.loom.task.RunClientTask>("runTestmodClient") {
-		classpath = sourceSets["testmod"].runtimeClasspath
-	}
-
-	register<net.fabricmc.loom.task.RunServerTask>("runTestmodServer") {
-		classpath = sourceSets["testmod"].runtimeClasspath
-	}
-}
-
 dependencies {
 	val testmodImplementation = configurations.getByName("testmodImplementation")
 	testmodImplementation(sourceSets["main"].output)
+}
+
+loom.runs {
+	create("testModClient") {
+		client()
+		source(sourceSets["testmod"])
+		configName = "Testmod Client"
+	}
+
+	create("testModServer") {
+		server()
+		source(sourceSets["testmod"])
+		configName = "Testmod Server"
+	}
 }
 
 // endregion
@@ -64,7 +68,6 @@ dependencies {
 loom.runConfigs.configureEach {
 	property("fabric.log.level", "debug")
 }
-
 
 tasks {
 	processResources {
@@ -92,7 +95,7 @@ tasks {
 
 	javadoc {
 		options {
-			source = "16"
+			source = "17"
 			encoding = "UTF-8"
 			memberLevel = JavadocMemberLevel.PRIVATE
 		}
@@ -128,11 +131,11 @@ tasks {
 	}
 
 	withType(JavaCompile::class).configureEach {
-		options.compilerArgs.addAll(listOf("--release", "16"))
+		options.compilerArgs.addAll(listOf("--release", "17"))
 	}
 
 	withType(Wrapper::class) {
-		gradleVersion = "7.0.2"
+		gradleVersion = "7.3.1"
 		distributionType = Wrapper.DistributionType.BIN
 	}
 }
@@ -140,19 +143,7 @@ tasks {
 publishing {
 	publications {
 		create<MavenPublication>("mavenJava") {
-			artifact(tasks.jar) {
-				builtBy(tasks.remapJar)
-			}
-			artifact("${project.buildDir.absolutePath}/libs/${Globals.abn}-${Globals.version}.jar") {
-				builtBy(tasks.remapJar)
-			}
-			artifact(tasks.getByName("sourcesJar")) {
-				builtBy(tasks.remapSourcesJar)
-			}
+			from(components["java"])
 		}
-	}
-
-	repositories {
-		if (System.getenv("MAVEN_REPO") != null) maven(url = System.getenv("MAVEN_REPO"))
 	}
 }

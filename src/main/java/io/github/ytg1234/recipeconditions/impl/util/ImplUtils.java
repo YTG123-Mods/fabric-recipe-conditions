@@ -17,7 +17,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
-import net.fabricmc.loader.util.version.VersionPredicateParser;
+import net.fabricmc.loader.api.metadata.version.VersionPredicate;
 
 public final class ImplUtils {
     public static final String CONDITIONS_MEMBER = "frc:conditions";
@@ -37,7 +37,7 @@ public final class ImplUtils {
             Version version = mod.get().getMetadata().getVersion();
             RecipeCondsConstants.LOGGER.debug(version.toString());
             try {
-                return VersionPredicateParser.matches(version, requiredVersion);
+                return VersionPredicate.parse(requiredVersion).test(version);
             } catch (VersionParsingException e) {
                 throw new RuntimeException(e); // The solution to checked exceptions
             }
