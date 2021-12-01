@@ -36,19 +36,23 @@ sourceSets.create("testmod") {
 
 configurations.getByName("testmodImplementation").extendsFrom(configurations["implementation"])
 
-tasks {
-	register<net.fabricmc.loom.task.RunClientTask>("runTestmodClient") {
-		classpath = sourceSets["testmod"].runtimeClasspath
-	}
-
-	register<net.fabricmc.loom.task.RunServerTask>("runTestmodServer") {
-		classpath = sourceSets["testmod"].runtimeClasspath
-	}
-}
-
 dependencies {
 	val testmodImplementation = configurations.getByName("testmodImplementation")
 	testmodImplementation(sourceSets["main"].output)
+}
+
+loom.runs {
+	create("testModClient") {
+		client()
+		source(sourceSets["testmod"])
+		configName = "Testmod Client"
+	}
+
+	create("testModServer") {
+		server()
+		source(sourceSets["testmod"])
+		configName = "Testmod Server"
+	}
 }
 
 // endregion
@@ -64,7 +68,6 @@ dependencies {
 loom.runConfigs.configureEach {
 	property("fabric.log.level", "debug")
 }
-
 
 tasks {
 	processResources {
