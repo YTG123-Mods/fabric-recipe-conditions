@@ -14,7 +14,7 @@
   },
   "frc:conditions": [
     {
-      "recipeconditions:item_registered": "minecraft:iron_ingot"
+      "recipeconditions:registered/minecraft/item": "minecraft:iron_ingot"
     }
   ]
 }
