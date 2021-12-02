@@ -8,6 +8,8 @@ import io.github.ytg1234.recipeconditions.api.condition.base.RecipeCondition;
 import io.github.ytg1234.recipeconditions.api.condition.base.RecipeConditionParameter;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
+
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,32 +52,26 @@ public record SingleCondition(RecipeCondition condition, @Nullable RecipeConditi
      *
      * @return the new representation of the entry
      */
-    public static SingleCondition fromJson(@NotNull Map.Entry<String, JsonElement> entry) {
+    @Contract("_ -> new")
+    public static @NotNull SingleCondition fromJson(@NotNull Map.Entry<String, JsonElement> entry) {
+        boolean negated = entry.getKey().startsWith("!");
         if (entry.getValue().isJsonArray()) {
             DefaultedList<RecipeConditionParameter> values = DefaultedList.of();
             for (JsonElement element : entry.getValue().getAsJsonArray()) {
                 values.add(RecipeConditionParameter.createJsonElement(element));
             }
-            boolean negated = false;
-            if (entry.getKey().startsWith("!")) negated = true;
             Identifier conditionId = new Identifier(entry.getKey().replace("!", ""));
             RecipeCondition condition = RecipeConds.RECIPE_CONDITION.get(conditionId);
             if (condition == null) {
-                throw new JsonParseException(new IllegalArgumentException("Unknown condition " +
-                                                                          conditionId.toString() +
-                                                                          "!"));
+                throw new JsonParseException(new IllegalArgumentException("Unknown condition %s!".formatted(conditionId)));
             }
             return new SingleCondition(condition, values, negated);
         } else {
             JsonElement value = entry.getValue();
-            boolean negated = false;
-            if (entry.getKey().startsWith("!")) negated = true;
             Identifier conditionId = new Identifier(entry.getKey().replace("!", ""));
             RecipeCondition condition = RecipeConds.RECIPE_CONDITION.get(conditionId);
             if (condition == null) {
-                throw new JsonParseException(new IllegalArgumentException("Unknown condition " +
-                                                                          conditionId.toString() +
-                                                                          "!"));
+                throw new JsonParseException(new IllegalArgumentException("Unknown condition %s!".formatted(conditionId)));
             }
             return new SingleCondition(condition, RecipeConditionParameter.createJsonElement(value), negated);
         }
@@ -91,11 +87,11 @@ public record SingleCondition(RecipeCondition condition, @Nullable RecipeConditi
         if (param != null) {
             RecipeCondsConstants.LOGGER.debug("Param is not null, " + param.toString());
             return negated != condition.check(param);
-        } else if (params != null) {
+        }
+        if (params != null) {
             RecipeCondsConstants.LOGGER.debug("Params is not null, " + params.toString());
             return negated != params.stream().allMatch(condition::check);
-        } else {
-            throw new IllegalStateException("How did this happen? params and param are null!");
         }
+        throw new IllegalStateException("How did this happen? params and param are null!");
     }
 }

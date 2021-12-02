@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,7 +32,8 @@ public final class RecipeConditionParameter {
      *
      * @return new parameter instance
      */
-    public static RecipeConditionParameter createString(@NotNull String string) {
+    @Contract("_ -> new")
+    public static @NotNull RecipeConditionParameter createString(@NotNull String string) {
         return createJsonElement(new JsonPrimitive(string));
     }
 
@@ -43,7 +45,8 @@ public final class RecipeConditionParameter {
      *
      * @return new parameter instance
      */
-    public static RecipeConditionParameter createJsonElement(@NotNull JsonElement json) {
+    @Contract(value = "_ -> new", pure = true)
+    public static @NotNull RecipeConditionParameter createJsonElement(@NotNull JsonElement json) {
         return new RecipeConditionParameter(json);
     }
 
@@ -55,7 +58,8 @@ public final class RecipeConditionParameter {
      *
      * @return new parameter instance.
      */
-    public static RecipeConditionParameter createInt(int i) {
+    @Contract("_ -> new")
+    public static @NotNull RecipeConditionParameter createInt(int i) {
         return createJsonElement(new JsonPrimitive(i));
     }
 
@@ -65,7 +69,7 @@ public final class RecipeConditionParameter {
     }
 
     // region I'd use extension functions if this was Kotlin
-    public String string() {
+    public @NotNull String string() {
         return value.getAsString();
     }
 
@@ -81,7 +85,7 @@ public final class RecipeConditionParameter {
         return value.getAsFloat();
     }
 
-    public JsonObject object() {
+    public @NotNull JsonObject object() {
         return value.getAsJsonObject();
     }
 
@@ -89,7 +93,7 @@ public final class RecipeConditionParameter {
         return value.getAsBoolean();
     }
 
-    public JsonArray array() {
+    public @NotNull JsonArray array() {
         return value.getAsJsonArray();
     }
     // endregion

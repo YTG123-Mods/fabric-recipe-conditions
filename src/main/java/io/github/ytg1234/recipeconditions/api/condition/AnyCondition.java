@@ -8,6 +8,7 @@ import io.github.ytg1234.recipeconditions.RecipeCondsConstants;
 import net.minecraft.util.collection.DefaultedList;
 
 import io.github.ytg1234.recipeconditions.api.condition.base.ConditionCheckable;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,7 +25,8 @@ public record AnyCondition(DefaultedList<EveryCondition> conditions) implements 
      *
      * @return the parsed form of the array
      */
-    public static AnyCondition fromJson(@NotNull JsonArray array) {
+    @Contract("_ -> new")
+    public static @NotNull AnyCondition fromJson(@NotNull JsonArray array) {
         DefaultedList<EveryCondition> list = DefaultedList.of();
         for (JsonElement element : array) {
             if (!(element instanceof JsonObject)) throw new JsonParseException("Conditions must be objects!");

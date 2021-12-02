@@ -3,6 +3,8 @@ package io.github.ytg1234.recipeconditions.api.condition.util;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.ytg1234.recipeconditions.api.condition.base.RecipeCondition;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
@@ -29,7 +31,8 @@ public final class RecipeCondsUtil {
      *
      * @return the generated {@link RecipeCondition} instance
      */
-    public static RecipeCondition stringParam(Predicate<String> cond) {
+    @Contract(pure = true)
+    public static @NotNull RecipeCondition stringParam(@NotNull Predicate<String> cond) {
         return param -> cond.test(param.string());
     }
 
@@ -41,7 +44,8 @@ public final class RecipeCondsUtil {
      *
      * @return the generated condition
      */
-    public static RecipeCondition boolParam(Predicate<Boolean> cond) {
+    @Contract(pure = true)
+    public static @NotNull RecipeCondition boolParam(@NotNull Predicate<Boolean> cond) {
         return param -> cond.test(param.bool());
     }
 
@@ -53,7 +57,8 @@ public final class RecipeCondsUtil {
      *
      * @return the generated  condition
      */
-    public static RecipeCondition intParam(Predicate<Integer> cond) {
+    @Contract(pure = true)
+    public static @NotNull RecipeCondition intParam(@NotNull Predicate<Integer> cond) {
         return param -> cond.test(param.integer());
     }
 
@@ -65,7 +70,8 @@ public final class RecipeCondsUtil {
      *
      * @return the generated condition
      */
-    public static RecipeCondition floatParam(Predicate<Float> cond) {
+    @Contract(pure = true)
+    public static @NotNull RecipeCondition floatParam(@NotNull Predicate<Float> cond) {
         return param -> cond.test(param.floatingPoint());
     }
 
@@ -77,7 +83,8 @@ public final class RecipeCondsUtil {
      *
      * @return the generated condition
      */
-    public static RecipeCondition arrayParam(Predicate<JsonArray> cond) {
+    @Contract(pure = true)
+    public static @NotNull RecipeCondition arrayParam(@NotNull Predicate<JsonArray> cond) {
         return param -> cond.test(param.array());
     }
 
@@ -89,7 +96,8 @@ public final class RecipeCondsUtil {
      *
      * @return the generated condition
      */
-    public static RecipeCondition objectParam(Predicate<JsonObject> cond) {
+    @Contract(pure = true)
+    public static @NotNull RecipeCondition objectParam(@NotNull Predicate<JsonObject> cond) {
         return param -> cond.test(param.object());
     }
 }

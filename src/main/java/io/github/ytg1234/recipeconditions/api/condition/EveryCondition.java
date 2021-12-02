@@ -6,6 +6,7 @@ import io.github.ytg1234.recipeconditions.RecipeCondsConstants;
 import net.minecraft.util.collection.DefaultedList;
 
 import io.github.ytg1234.recipeconditions.api.condition.base.ConditionCheckable;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -24,7 +25,8 @@ public record EveryCondition(DefaultedList<SingleCondition> conditions) implemen
      *
      * @return the parsed representation
      */
-    public static EveryCondition fromJson(JsonObject object) {
+    @Contract("_ -> new")
+    public static @NotNull EveryCondition fromJson(@NotNull JsonObject object) {
         DefaultedList<SingleCondition> list = DefaultedList.of();
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
             list.add(SingleCondition.fromJson(entry));
