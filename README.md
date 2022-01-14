@@ -1,5 +1,5 @@
 # Obsolete
-This project has been made obsolete by the new Fabric API. [https://maven.fabricmc.net/docs/fabric-api-0.46.0+1.18/net/fabricmc/fabric/api/resource/conditions/v1/package-summary.html](More info)
+This project has been made obsolete by the new Fabric API. [More info](https://maven.fabricmc.net/docs/fabric-api-0.46.0+1.18/net/fabricmc/fabric/api/resource/conditions/v1/package-summary.html)
 
 # Fabric Recipe Conditions
 Fabric Recipe Conditions is a library that extends recipes with the ability to load conditionally.<br/>
