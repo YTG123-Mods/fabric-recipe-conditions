@@ -1,3 +1,6 @@
+# Obsolete
+This project has been made obsolete by the new Fabric API. [https://maven.fabricmc.net/docs/fabric-api-0.46.0+1.18/net/fabricmc/fabric/api/resource/conditions/v1/package-summary.html](More info)
+
 # Fabric Recipe Conditions
 Fabric Recipe Conditions is a library that extends recipes with the ability to load conditionally.<br/>
 Currently, the conditions are only checked when the resources reload (world load or `/reload`), but most of the built-in
